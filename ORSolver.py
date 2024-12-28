@@ -16,12 +16,10 @@ def save_results_to_file(results, filename):
 
 if __name__ == "__main__":
     constraints_example = [
-        ([6, 4], "<=", 24),
-        ([1, 2], "<=", 6),
-        ([0, 1], "<=", 2),
-        ([-1, 1], "<=", 1),
+        ([4, 3], "<=", 20),
+        ([1, -2], "<=", 0),
     ]
-    objective_example = [5, 4]
+    objective_example = [40, 25]
 
     simplex_solver = SimplexSolver(objective_example, constraints_example)
     simplex_result = simplex_solver.solve()
@@ -41,16 +39,24 @@ if __name__ == "__main__":
 
     formula = ' + '.join([f'{coef[0]}x + {coef[1]}y {op} {val}' for coef, op, val in constraints_example])
     formula += f' (Maximize: {objective_example[0]}x + {objective_example[1]}y)'
-    image_filename = f'solutions/graphique_solution_{formula.replace(" ", "_").replace("<=", "leq").replace("+", "plus").replace("(", "_").replace(")", "_").replace(":", "_").replace(" ", "_")}.png'
-    visualizer.save_plot(image_filename)
+    
+    calculation_folder = f'solutions/calculation_{formula.replace(" ", "_").replace("<=", "leq").replace("+", "plus").replace("(", "_").replace(")", "_").replace(":", "_").replace(" ", "_")}'
+    if not os.path.exists(calculation_folder):
+        os.makedirs(calculation_folder)
+
+    image_filename_graphical = f'{calculation_folder}/graphique_solution.png'
+    visualizer.save_plot(image_filename_graphical)
+
+    image_filename_simplex = f'{calculation_folder}/graphique_solution_simplex.png'
+    simplex_solver.plot_solution(image_filename_simplex)
 
     if not os.path.exists('solutions'):
         os.makedirs('solutions')
 
-    filename = f'solutions/resultats_solution_{formula.replace(" ", "_").replace("<=", "leq").replace("+", "plus").replace("(", "_").replace(")", "_")}.txt'
+    filename = f'{calculation_folder}/resultats_solution.txt'
 
     results = 'Voici les résultats de la solution : \n Simplex Method: \n Optimal Solution: {}\n\n Graphical Method: \n Optimal Solution: {}'.format(simplex_result, graphical_result)
     save_results_to_file(results, filename)
 
-    sys.exit()  
-    sys.exit()  
+    sys.exit()
+    sys.exit()
