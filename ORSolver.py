@@ -1,6 +1,6 @@
 import logging
 
-from LinearProgramVisualizer import LinearProgramVisualizer
+from GraphicalORSolver import GraphicalORSolver
 from SimplexSolver import SimplexSolver
 
 logging.basicConfig(level=logging.INFO)
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     print("Simplex Method:")
     print("Optimal Solution:", simplex_result)
 
-    visualizer = LinearProgramVisualizer(
+    visualizer = GraphicalORSolver(
         constraints_example, objective=objective_example
     )
     graphical_result = visualizer.calculate_graphical_solution()

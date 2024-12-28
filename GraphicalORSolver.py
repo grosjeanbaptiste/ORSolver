@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-class LinearProgramVisualizer:
+class GraphicalORSolver:
     """
     Class to visualize linear programming problems and calculate solutions graphically.
     """
