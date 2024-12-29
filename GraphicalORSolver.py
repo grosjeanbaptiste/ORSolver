@@ -162,4 +162,15 @@ class GraphicalORSolver:
         plt.ylim(0, 10)
         plt.grid(True, linestyle="--", alpha=0.6)
         plt.legend(loc="upper left", fontsize=12)
+
+    def save_plot(self, filename='plot.png', format='png'):
+        """
+        Save the current plot to a file.
+        
+        Args:
+            filename (str): The name of the file to save the plot as.
+            format (str): The format to save the plot in (e.g., 'png', 'jpg').
+        """
+        plt.savefig(filename, format=format)
         plt.show()
+        plt.close()

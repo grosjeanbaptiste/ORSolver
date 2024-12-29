@@ -1,0 +1,6 @@
+Voici les résultats de la solution : 
+ Simplex Method: 
+ Optimal Solution: {'solution': [2.0, 4.0], 'objective_value': -180.0}
+
+ Graphical Method: 
+ Optimal Solution: {'solution': array([2., 4.]), 'objective_value': 180.0}
