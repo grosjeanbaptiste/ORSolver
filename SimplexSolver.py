@@ -54,6 +54,46 @@ class SimplexSolver:
         pivot_column = self.get_pivot_column()
         pivot_row = self.get_pivot_row(pivot_column)
 
+        print("État initial :")
+        column_names = [f"X{i+1}" for i in range(len(self.objective))] + [f"S{i+1}" for i in range(len(self.objective))]
+        print(f"""\n{" | ".join(column_names)}\n{"-" * (len(column_names) * 10)}""")
+        for row in self.tableau:
+            print(" | ".join([f"{val:10.2f}" for val in row]))
+        print("=" * 40)
+
+        with open('resultats_solution.txt', 'a') as f:
+            f.write("État initial :\n")
+            f.write(f"""\n{" | ".join(column_names)}\n{"-" * (len(column_names) * 10)}\n""")
+            for row in self.tableau:
+                f.write(" | ".join([f"{val:10.2f}" for val in row]) + '\n')
+            f.write("=" * 40 + '\n')
+
+        print(f"\n=== Itération : ===")
+        print(f"Variable entrant : X{pivot_column+1}, Variable sortante : S{self.basic_variables[pivot_row]-len(self.objective)+1}")
+
+        with open('resultats_solution.txt', 'a') as f:
+            f.write(f"\n=== Itération : ===\n")
+            f.write(f"Variable entrant : X{pivot_column+1}, Variable sortante : S{self.basic_variables[pivot_row]-len(self.objective)+1}\n")
+        
+        slack_variables = [f'S{i+1}' for i in range(len(self.objective))]
+
+        print("Détails de l'itération :")
+        print(f"Variables de base : {[f'S{i+1}' if i >= len(self.objective) else f'X{i+1}' for i in self.basic_variables]}")
+        print(f"Variables non de base : {[f'S{i+1}' if i >= len(self.objective) else f'X{i+1}' for i in range(len(self.tableau[0]) - 1) if i not in self.basic_variables]}\n")
+        ratios = []
+        for i, row in enumerate(self.tableau[:-1]):
+            if row[pivot_column] > 0:
+                ratios.append((row[-1] / row[pivot_column], i))
+        print(f"Ratios calculés : {ratios}")
+        print(f"Colonne pivot : {pivot_column}, Ligne pivot : {pivot_row}")
+
+        with open('resultats_solution.txt', 'a') as f:
+            f.write("Détails de l'itération :\n")
+            f.write(f"Variables de base : {[f'S{i+1}' if i >= len(self.objective) else f'X{i+1}' for i in self.basic_variables]}\n")
+            f.write(f"Variables non de base : {[f'S{i+1}' if i >= len(self.objective) else f'X{i+1}' for i in range(len(self.tableau[0]) - 1) if i not in self.basic_variables]}\n")
+            f.write(f"Ratios calculés : {ratios}\n")
+            f.write(f"Colonne pivot : {pivot_column}, Ligne pivot : {pivot_row}\n")
+
         pivot_value = self.tableau[pivot_row][pivot_column]
         self.tableau[pivot_row] = [x / pivot_value for x in self.tableau[pivot_row]]
 
@@ -63,14 +103,41 @@ class SimplexSolver:
                 self.tableau[i] = [
                     a - multiplier * b for a, b in zip(row, self.tableau[pivot_row])
                 ]
+        print("État du tableau après l'itération :")
+        column_names = [f"X{i+1}" for i in range(len(self.objective))] + [f"S{i+1}" for i in range(len(self.objective))]
+        print(f"""\n{" | ".join(column_names)}\n{"-" * (len(column_names) * 10)}""")
+        for row in self.tableau:
+            print(" | ".join([f"{val:10.2f}" for val in row]))
+        print("=" * 40)
+
+        with open('resultats_solution.txt', 'a') as f:
+            f.write("État du tableau après l'itération :\n")
+            f.write(f"""\n{" | ".join(column_names)}\n{"-" * (len(column_names) * 10)}\n""")
+            for row in self.tableau:
+                f.write(" | ".join([f"{val:10.2f}" for val in row]) + '\n')
+            f.write("=" * 40 + '\n')
 
         self.basic_variables[pivot_row] = pivot_column
 
     def solve(self):
         self.initialize_tableau()
 
+        with open('resultats_solution.txt', 'w') as f:
+            f.write("État initial :\n")
+            column_names = [f"X{i+1}" for i in range(len(self.objective))] + [f"S{i+1}" for i in range(len(self.objective))]
+            f.write(f"""\n{" | ".join(column_names)}\n{"-" * (len(column_names) * 10)}\n""")
+            for row in self.tableau:
+                f.write(" | ".join([f"{val:10.2f}" for val in row]) + '\n')
+            f.write("=" * 40 + '\n')
+
         while not self.is_optimal():
             self.perform_iteration()
+
+        with open('resultats_solution.txt', 'a') as f:
+            f.write("Solution optimale : \n")
+            f.write(str(-self.tableau[-1][-1]) + '\n')
+
+        print("Solution optimale : ", -self.tableau[-1][-1])
 
         num_vars = len(self.objective)
         solution = [0] * num_vars

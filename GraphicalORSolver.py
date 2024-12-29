@@ -172,5 +172,5 @@ class GraphicalORSolver:
             format (str): The format to save the plot in (e.g., 'png', 'jpg').
         """
         plt.savefig(filename, format=format)
-        plt.show()
+        # plt.show()
         plt.close()
