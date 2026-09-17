@@ -76,6 +76,8 @@ The Simplex method outputs:
 - **Optimal Solution**: Values of the variables (\(x_1, x_2, \ldots\)) that optimize the objective function.
 - **Objective Value**: The optimized value of \(z\).
 
+The Simplex method currently supports only `<=` constraints.
+
 ### Graphical Method
 The graphical method displays:
 - A clear visualization of constraints.
