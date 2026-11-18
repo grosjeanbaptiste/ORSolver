@@ -1,6 +1,8 @@
 # ORSolver: Comprehensive Operations Research Solver
 
-[![Tests](https://img.shields.io/badge/tests-61%20passed-success.svg)](file:///Users/baptistegrosjean/Source/UMons/ORSolver/tests)
+[![CI](https://github.com/baptistegrosjean/ORSolver/actions/workflows/ci.yml/badge.svg)](https://github.com/baptistegrosjean/ORSolver/actions)
+[![Tests](https://img.shields.io/badge/tests-74%20passed-success.svg)](file:///Users/baptistegrosjean/Source/UMons/ORSolver/tests)
+[![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)](file:///Users/baptistegrosjean/Source/UMons/ORSolver/tests)
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.15-blue.svg)](pyproject.toml)
 [![Methodology](https://img.shields.io/badge/methodology-100%25%20Pure%20TDD-brightgreen.svg)](tests)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
@@ -70,9 +72,9 @@ pip install -r requirements.txt
 
 ### Exécuter la suite complète de tests (100% Pure TDD)
 ```bash
-pytest -v
+pytest -v --cov=orsolver --cov-report=term-missing
 ```
-**61 tests unitaires** couvrant l'ensemble des modules, algorithmes et cas limites.
+**74 tests unitaires (95% de couverture de code)** couvrant rigoureusement l'ensemble des modules, algorithmes et cas limites.
 
 ---
 
@@ -189,10 +191,44 @@ print(f"Probabilité de finir en <= 10 jours : {sim_res.probability_of_completio
 
 ---
 
+### 19. Interface Ligne de Commande (CLI) & Parser CPLEX `.lp`
+
+ORSolver fournit une commande CLI `orsolver` installable et directement utilisable dans le terminal :
+
+```bash
+# Résoudre un problème LP en ligne de commande
+orsolver solve model.lp
+
+# Exporter la solution au format JSON
+orsolver solve model.lp --output solution.json
+
+# Vérifier la version installée
+orsolver --version
+```
+
+Exemple de fichier CPLEX `.lp` supporté :
+```text
+Maximize
+ obj: 3 x1 + 2 x2
+Subject To
+ c1: 2 x1 + x2 <= 100
+ c2: x1 + x2 <= 80
+ c3: x1 <= 40
+Bounds
+ 0 <= x1
+ 0 <= x2
+End
+```
+
+---
+
 ## 🏛 Architecture du Dépôt
 
 ```
 ORSolver/
+├── .github/
+│   └── workflows/
+│       └── ci.yml          # Pipeline CI multi-version (Python 3.9 à 3.13)
 ├── orsolver/
 │   ├── core/               # Abstractions (Problem, Variable, Constraint, Solution)
 │   ├── lp/                 # Simplexe 2-phases, Simplexe Dual, Dualité, Sensibilité, Goal Programming
@@ -211,11 +247,11 @@ ORSolver/
 │   ├── heuristics/         # TSP: Plus proche voisin, 2-Opt, Recuit Simulé
 │   ├── nlp/                # Optimisation non-linéaire: Section dorée 1D, Descente de gradient
 │   ├── visualizer/         # Méthode graphique 2D auto-scalée
-│   └── cli/                # Parser standard CPLEX .lp
-├── tests/                  # Suite de tests unitaires 100% pure TDD (61 tests)
+│   └── cli/                # Parser standard CPLEX .lp & Point d'entrée CLI (orsolver)
+├── tests/                  # Suite de tests unitaires 100% pure TDD (74 tests, 95% couverture)
 ├── GraphicalORSolver.py    # Wrapper rétro-compatible
 ├── SimplexSolver.py        # Wrapper rétro-compatible
 ├── ORSolver.py             # Script principal historique
-├── pyproject.toml          # Fichier de packaging standard Python
+├── pyproject.toml          # Fichier de packaging standard Python (PEP 621)
 └── requirements.txt        # Dépendances du projet
 ```

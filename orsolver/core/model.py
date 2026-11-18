@@ -63,6 +63,9 @@ class Problem:
         self.variables[name] = var
         return var
 
+    def get_variable(self, name: str) -> Optional[Variable]:
+        return self.variables.get(name)
+
     def set_objective(self, coefficients: Dict[str, float], sense: Optional[Sense] = None) -> None:
         if sense is not None:
             self.sense = sense

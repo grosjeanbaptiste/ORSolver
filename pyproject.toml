@@ -5,19 +5,31 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "orsolver"
 version = "1.0.0"
-description = "Comprehensive Operations Research Solver (LP, Simplex 2-Phase, Dual Simplex, MIP, Transportation, Hungarian, Networks)"
+description = "Comprehensive Operations Research Solver (LP, Simplex 2-Phase, Dual Simplex, MIP, Transportation, Hungarian, Networks, Game Theory, Queuing, Inventory, MCDA)"
 readme = "README.md"
 requires-python = ">=3.9"
+license = "MIT"
 dependencies = [
     "numpy>=1.20.0",
     "matplotlib>=3.5.0",
 ]
 
+[project.scripts]
+orsolver = "orsolver.cli.main:main"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
 ]
+
+[tool.setuptools.packages.find]
+include = ["orsolver*"]
+
+[tool.setuptools]
+py-modules = ["GraphicalORSolver", "SimplexSolver", "ORSolver"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+addopts = "--cov=orsolver --cov-report=term-missing"
